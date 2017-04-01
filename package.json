@@ -1,0 +1,12 @@
+{
+  "name": "version.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "version.js",
+  "browser": "version.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
