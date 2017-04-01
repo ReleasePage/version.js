@@ -1,5 +1,5 @@
-const BASE_URL = window.__version_base_url || 'http://staging.api.releasepage.co';
-const MANAGE_URL = window.__manage_base_url || 'https://staging.manage.releasepage.co';
+const BASE_URL = window.__version_base_url || 'http://api.releasepage.co';
+const HELP_URL = window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
 
 const Version = function (opts) {
   this.options = opts;
@@ -21,11 +21,9 @@ Version.prototype = {
     switch (status) {
       case 404:
         return console.error(`version.js: A page by name ${this.options.page}`);
-      case 401: {
-        const apiUrl = `${MANAGE_URL}/${this.options.page}/add-ons/api`;
-        console.error(`version.js: enable the version api for this page: ${apiUrl}`);
+      case 401:
+        console.error(`version.js: enable the version api for this page: ${HELP_URL}`);
         break;
-      }
       case 200: {
         const data = JSON.parse(response);
         this.latest = data.latest;

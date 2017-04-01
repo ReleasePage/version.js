@@ -2,11 +2,26 @@
   "name": "version.js",
   "version": "1.0.0",
   "description": "",
-  "main": "version.js",
-  "browser": "version.js",
+  "main": "./build/version.js",
+  "browser": "./build/version.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint ./version.js",
+    "build": "rollup -c && rollup -c ./rollup.min.config.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "6.1.2",
+    "babel-plugin-transform-object-rest-spread": "6.6.5",
+    "babel-preset-es2015": "6.18.0",
+    "eslint": "2.4.0",
+    "eslint-config-airbnb": "6.0.2",
+    "eslint-plugin-prefer-object-spread": "1.0.0",
+    "rollup": "0.41.4",
+    "rollup-plugin-babel": "2.7.1",
+    "rollup-plugin-uglify": "^1.0.1"
+  },
+  "dependencies": {
+    "babel-plugin-external-helpers": "^6.22.0"
+  }
 }
