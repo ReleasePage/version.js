@@ -4,8 +4,8 @@
 
 <img width="950" alt="screen shot 2017-04-02 at 12 29 30" src="https://cloud.githubusercontent.com/assets/1462828/24584703/2b045044-17a0-11e7-9a27-87effaf65a29.png">
 
-[Basic Demo][3]
-[Grouped Release Demo][4]
+- [Basic Demo][3]
+- [Grouped Release Demo][4]
 
 ## Enable API access
 
