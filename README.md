@@ -24,6 +24,8 @@ Any elements with the attribute `data-version-badge` will be populated with the 
 <p>The latest version is <span data-version-badge></span></p>
 ```
 
+<img width="296" alt="screen shot 2017-04-01 at 18 44 41" src="https://cloud.githubusercontent.com/assets/1462828/24578484/6909bb62-170b-11e7-98a9-c8015e2bb21b.png">
+
 ### Name
 Any elements with the attribute `data-repo-name` will display the friendly name of the repository.
 

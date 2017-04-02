@@ -6,7 +6,8 @@
   "browser": "./build/version.min.js",
   "scripts": {
     "test": "eslint ./version.js",
-    "build": "rollup -c && rollup -c ./rollup.min.config.js"
+    "build": "rollup -c && rollup -c ./rollup.min.config.js",
+    "watch": "rollup -w -c && rollup -w -c ./rollup.min.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,8 @@
     "eslint-plugin-prefer-object-spread": "1.0.0",
     "rollup": "0.41.4",
     "rollup-plugin-babel": "2.7.1",
-    "rollup-plugin-uglify": "^1.0.1"
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^3.2.2"
   },
   "dependencies": {
     "babel-plugin-external-helpers": "^6.22.0"

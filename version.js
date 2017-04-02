@@ -1,4 +1,4 @@
-const BASE_URL = window.__version_base_url || 'http://api.releasepage.co';
+const BASE_URL = window.__version_base_url || 'http://staging.api.releasepage.co';
 const HELP_URL = window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
 
 const Version = function (opts) {
@@ -43,32 +43,82 @@ Version.prototype = {
     if (repoNameEls.length) {
       this.renderRepoNames({ elements: repoNameEls });
     }
+    const authorEls = document.querySelectorAll('[data-version-author]');
+    if (authorEls.length) {
+      this.renderAuthors({ elements: authorEls });
+    }
+    const renderPublishedAt = document.querySelectorAll('[data-version-published]');
+    if (renderPublishedAt.length) {
+      this.renderPublishedAt({ elements: renderPublishedAt });
+    }
     return this;
+  },
+
+  renderAuthors({ elements }) {
+    return elements.forEach((el) => {
+      const repo = el.parentElement.getAttribute('data-version-for');
+      let authors;
+      if (repo) {
+        authors = [this.latest.find(l => new RegExp(l.repo, 'i').test(repo)).author];
+      } else if (this.latestGrouped) {
+        authors = this.latestGrouped.authors;
+      } else {
+        authors = this.latest.reduce((all, l) => {
+          if (all.includes(l.author)) return all;
+          return [...all, l.author];
+        }, []);
+      }
+      // eslint-disable-next-line no-param-reassign
+      el.textContent = formatArray(authors);
+    });
+  },
+
+  renderPublishedAt({ elements }) {
+    return elements.forEach((el) => {
+      const repo = el.parentElement.getAttribute('data-version-for');
+      let publishedAt;
+      if (repo) {
+        publishedAt = this.latest.find(l => new RegExp(l.repo, 'i').test(repo)).published_at;
+      } else if (this.isGrouped()) {
+        publishedAt = this.latestGrouped.published_at;
+      } else {
+        publishedAt = this.latest[0].published_at;
+      }
+      // eslint-disable-next-line no-param-reassign
+      el.textContent = new Date(publishedAt).toDateString();
+    });
   },
 
   renderRepoNames({ elements }) {
     return elements.forEach((el) => {
-      const repoId = el.getAttribute('data-repo-name');
-      const repoDetails = this.latest.find(l => l.repo === repoId);
-      if (!repoDetails) return;
+      const repo = el.parentElement.getAttribute('data-version-for');
+      let names;
+      if (repo) {
+        // use the repo provided
+        const repoDetails = this.latest.find(l => new RegExp(l.repo, 'i').test(repo));
+        names = [repoDetails.name || repoDetails.repo];
+      } else {
+        // else use all
+        names = this.latest.map(l => l.name || l.repo);
+      }
       // eslint-disable-next-line no-param-reassign
-      el.textContent = repoDetails.name || repoDetails.repo;
+      el.textContent = formatArray(names);
     });
   },
 
   renderBadges({ elements }) {
     elements.forEach((el) => {
-      if (el.tagName === 'A' && !el.href) {
-        el.setAttribute('href', this.permalink);
-      }
-      const repo = el.getAttribute('data-version-repo');
+      const repo = el.parentElement.getAttribute('data-version-for');
       let version;
       if (repo) {
-        const repoVersion = this.latest.find(l => l.repo === repo);
-        version = repoVersion.version;
-      }
-      if (!version && this.latestGrouped) {
+        // use the repo provided
+        version = this.latest.find(l => new RegExp(l.repo, 'i').test(repo)).version;
+      } else if (this.isGrouped()) {
+        // if no repo provided then use the grouped version number
         version = this.latestGrouped.version;
+      } else {
+        // if no version yet then pick the latest one to use
+        version = this.latest[0].version || this.latest[0].version;
       }
       // eslint-disable-next-line no-param-reassign
       el.textContent = version;
@@ -80,7 +130,7 @@ Version.prototype = {
       return this.latestGrouped.published_at;
     }
     if (repo) {
-      const repoDetails = this.latest.find(l => l.repo === repo);
+      const repoDetails = this.latest.find(l => new RegExp(l.repo, 'i').test(repo));
       return repoDetails ? repoDetails.published_at : null;
     }
     return this.latest[0].published_at;
@@ -91,7 +141,7 @@ Version.prototype = {
       return this.latestGrouped.authors;
     }
     if (repo) {
-      const repoDetails = this.latest.find(l => l.repo === repo);
+      const repoDetails = this.latest.find(l => new RegExp(l.repo, 'i').test(repo));
       return repoDetails ? repoDetails.author : null;
     }
     return this.latest[0].author;
@@ -102,7 +152,7 @@ Version.prototype = {
       return this.latestGrouped.version;
     }
     if (repo) {
-      const repoDetails = this.latest.find(l => l.repo === repo);
+      const repoDetails = this.latest.find(l => new RegExp(l.repo, 'i').test(repo));
       return repoDetails ? repoDetails.version : null;
     }
     return this.latest[0].version;
@@ -112,6 +162,22 @@ Version.prototype = {
     return !!this.latestGrouped;
   }
 };
+
+function formatArray(arr) {
+  let outStr = '';
+  if (arr.length === 1) {
+    outStr = arr[0];
+  } else if (arr.length === 2) {
+    // joins all with "and" but no commas
+    // example: "bob and sam"
+    outStr = arr.join(' and ');
+  } else if (arr.length > 2) {
+    // joins all with commas, but last one gets ", and" (oxford comma!)
+    // example: "bob, joe, and sam"
+    outStr = `${arr.slice(0, -1).join(', ')}, and ${arr.slice(-1)}`;
+  }
+  return outStr;
+}
 
 if (typeof window !== 'undefined') {
   // set up automatically
