@@ -110,6 +110,6 @@ Version.tag({ repo: 'releasepage/version.js' })
 
 
 [1]: https://help.releasepage.co/api/getting-started
-[2]: https://help.releasepage.co/
+[2]: https://help.releasepage.co/faq/release-pages/how-do-i-group-multiple-repositories-into-one-release-page
 [3]: http://codepen.io/Jivings/pen/KWJwxY
 [4]: http://codepen.io/Jivings/pen/zZezNa
