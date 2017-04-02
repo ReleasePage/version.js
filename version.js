@@ -1,4 +1,4 @@
-const BASE_URL = window.__version_base_url || 'http://staging.api.releasepage.co';
+const BASE_URL = window.__version_base_url || 'http://api.releasepage.co';
 const HELP_URL = window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
 
 const Version = function (opts) {

@@ -11,7 +11,7 @@ var toConsumableArray = function (arr) {
   }
 };
 
-var BASE_URL = window.__version_base_url || 'http://staging.api.releasepage.co';
+var BASE_URL = window.__version_base_url || 'http://api.releasepage.co';
 var HELP_URL = window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
 
 var Version = function Version(opts) {
