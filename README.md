@@ -2,6 +2,11 @@
 
 `version.js` allows you to display the latest version number of your webapp, shiny! ✨
 
+<img width="950" alt="screen shot 2017-04-02 at 12 29 30" src="https://cloud.githubusercontent.com/assets/1462828/24584703/2b045044-17a0-11e7-9a27-87effaf65a29.png">
+
+[Basic Demo][3]
+[Grouped Release Demo][4]
+
 ## Enable API access
 
 First you need to grab your ReleasePage API key. Learn more about the ReleasePage API [here][1].
@@ -33,17 +38,33 @@ Any elements with the attribute `data-repo-name` will display the friendly name 
 <p>The latest version of <span data-repo-name></span> is <span data-version-badge></span></p>
 ```
 
+<img width="540" alt="screen shot 2017-04-02 at 12 32 13" src="https://cloud.githubusercontent.com/assets/1462828/24584717/7100c730-17a0-11e7-923e-862a4fdecc66.png">
+
 ## Grouped versions
 
-If your ReleasePage has [grouped versions][2] then you can display the repo versions individually, or as a grouped version.
+If your ReleasePage is cool enough to use [grouped versions][2] then you can display the repo versions individually, or grouped.
 
 ```html
-<p data-version-for="releasepage/version.js">
-  The latest version of <span data-repo-name></span> is <span data-version-badge></span>
+<p>
+  The latest version of <span data-repo-name></span> is <span data-version-badge></span>, authored by <span data-version-author></span> on <span data-version-published></span>
 </p>
 ```
 
-Without providing a `data-version-for` container, the badges will always display the grouped version if available.
+<img width="1312" alt="screen shot 2017-04-02 at 12 43 47" src="https://cloud.githubusercontent.com/assets/1462828/24584754/104f5404-17a2-11e7-80be-f66be498bb92.png">
+
+
+Specify the repo name to include that repo individually.
+
+```html
+<p data-version-for="squarecat/release-notes">
+  The latest version of <span data-repo-name></span> is <span data-version-badge></span>, authored by <span data-version-author></span> on <span data-version-published></span>
+</p>
+```
+
+<img width="960" alt="screen shot 2017-04-02 at 12 45 17" src="https://cloud.githubusercontent.com/assets/1462828/24584756/46739e14-17a2-11e7-8b39-5728febdea01.png">
+
+
+Note; if you don't provide a `data-version-for` container, badges will always display the grouped version if it's available.
 
 ## Other version stuff 🚀
 
@@ -90,3 +111,5 @@ Version.tag({ repo: 'releasepage/version.js' })
 
 [1]: https://help.releasepage.co/api/getting-started
 [2]: https://help.releasepage.co/
+[3]: http://codepen.io/Jivings/pen/KWJwxY
+[4]: http://codepen.io/Jivings/pen/zZezNa
