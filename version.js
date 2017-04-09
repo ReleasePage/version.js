@@ -3,21 +3,21 @@ const BASE_URL = (window && window.__version_base_url) || 'http://api.releasepag
 const HELP_URL = (window && window.__help_base_url) || 'https://help.releasepage.co/api/getting-started';
 
 const __Version = function (opts) {
-  this.options = opts;
+  this.opts = opts;
   this.bind('load', () => this.render());
 };
 
 __Version.prototype = {
   options(opts) {
-    this.options = opts;
+    this.opts = opts;
     return this;
   },
 
   load() {
-    if (this.options.apiKey) {
+    if (this.opts.apiKey) {
       console.error('version.js: no key provided');
     }
-    if (this.options.pageId) {
+    if (this.opts.pageId) {
       console.error('version.js: no pageId provided');
     }
     const onLoad = this.onLoad.bind(this);
@@ -25,7 +25,7 @@ __Version.prototype = {
     xhr.addEventListener('load', function () {
       onLoad({ status: this.status, response: this.response });
     });
-    const url = `${BASE_URL}/v1/pages/${this.options.page}/version?apiKey=${this.options.apiKey}`;
+    const url = `${BASE_URL}/v1/pages/${this.opts.page}/version?apiKey=${this.opts.apiKey}`;
     xhr.open('GET', url);
     xhr.send();
   },
@@ -34,7 +34,7 @@ __Version.prototype = {
     switch (status) {
       case 404:
         return console.error(
-          `version.js: A Release Page with id ${this.options.pageId} does not exist`
+          `version.js: A Release Page with id ${this.opts.pageId} does not exist`
         );
       case 401:
         console.error(

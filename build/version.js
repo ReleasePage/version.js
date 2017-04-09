@@ -75,7 +75,7 @@ var version_1 = createCommonjsModule(function (module) {
   var __Version = function __Version(opts) {
     var _this = this;
 
-    this.options = opts;
+    this.opts = opts;
     this.bind('load', function () {
       return _this.render();
     });
@@ -83,14 +83,14 @@ var version_1 = createCommonjsModule(function (module) {
 
   __Version.prototype = {
     options: function options(opts) {
-      this.options = opts;
+      this.opts = opts;
       return this;
     },
     load: function load() {
-      if (this.options.apiKey) {
+      if (this.opts.apiKey) {
         console.error('version.js: no key provided');
       }
-      if (this.options.pageId) {
+      if (this.opts.pageId) {
         console.error('version.js: no pageId provided');
       }
       var onLoad = this.onLoad.bind(this);
@@ -98,7 +98,7 @@ var version_1 = createCommonjsModule(function (module) {
       xhr.addEventListener('load', function () {
         onLoad({ status: this.status, response: this.response });
       });
-      var url = BASE_URL + '/v1/pages/' + this.options.page + '/version?apiKey=' + this.options.apiKey;
+      var url = BASE_URL + '/v1/pages/' + this.opts.page + '/version?apiKey=' + this.opts.apiKey;
       xhr.open('GET', url);
       xhr.send();
     },
@@ -108,7 +108,7 @@ var version_1 = createCommonjsModule(function (module) {
 
       switch (status) {
         case 404:
-          return console.error('version.js: A Release Page with id ' + this.options.pageId + ' does not exist');
+          return console.error('version.js: A Release Page with id ' + this.opts.pageId + ' does not exist');
         case 401:
           console.error('version.js: enable the version api for this Release Page: ' + HELP_URL);
           break;
