@@ -1,12 +1,25 @@
-const BASE_URL = window.__version_base_url || 'http://api.releasepage.co';
-const HELP_URL = window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
+const EventEmitter = require('microevent');
+const BASE_URL = (window && window.__version_base_url) || 'http://api.releasepage.co';
+const HELP_URL = (window && window.__help_base_url) || 'https://help.releasepage.co/api/getting-started';
 
-const Version = function (opts) {
+const __Version = function (opts) {
   this.options = opts;
+  this.bind('load', () => this.render());
 };
 
-Version.prototype = {
+__Version.prototype = {
+  options(opts) {
+    this.options = opts;
+    return this;
+  },
+
   load() {
+    if (this.options.apiKey) {
+      console.error('version.js: no key provided');
+    }
+    if (this.options.pageId) {
+      console.error('version.js: no pageId provided');
+    }
     const onLoad = this.onLoad.bind(this);
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function () {
@@ -20,9 +33,13 @@ Version.prototype = {
   onLoad({ status, response }) {
     switch (status) {
       case 404:
-        return console.error(`version.js: A page by name ${this.options.page}`);
+        return console.error(
+          `version.js: A Release Page with id ${this.options.pageId} does not exist`
+        );
       case 401:
-        console.error(`version.js: enable the version api for this page: ${HELP_URL}`);
+        console.error(
+          `version.js: enable the version api for this Release Page: ${HELP_URL}`
+        );
         break;
       case 200: {
         const data = JSON.parse(response);
@@ -34,7 +51,10 @@ Version.prototype = {
       default:
         return console.error('version.js: ReleasePage API error', status);
     }
+    return this.trigger('load');
+  },
 
+  render() {
     const badgeEls = document.querySelectorAll('[data-version-badge]');
     if (badgeEls.length) {
       this.renderBadges({ elements: badgeEls });
@@ -148,6 +168,9 @@ Version.prototype = {
   },
 
   tag({ repo } = {}) {
+    if (window && window.__debug_version) {
+      return window.__debug_version;
+    }
     if (this.isGrouped()) {
       return this.latestGrouped.version;
     }
@@ -162,6 +185,8 @@ Version.prototype = {
     return !!this.latestGrouped;
   }
 };
+
+EventEmitter.mixin(__Version);
 
 function formatArray(arr) {
   let outStr = '';
@@ -179,17 +204,26 @@ function formatArray(arr) {
   return outStr;
 }
 
-if (typeof window !== 'undefined') {
+let version;
+const el = document.querySelector('script[data-page-id]');
+if (el) {
+  const page = el.getAttribute('data-page-id');
+  const apiKey = el.getAttribute('data-api-key');
+
+  version = new __Version({
+    page,
+    apiKey
+  });
+} else {
+  version = new __Version();
+}
+
+if (module) {
+  module.exports = version;
+} else if (typeof window !== 'undefined') {
+  window.version = version;
   // set up automatically
   document.addEventListener('DOMContentLoaded', () => {
-    const el = document.querySelector('script[data-page-id]');
-    if (!el) return console.error('version.js: no key provided');
-    const page = el.getAttribute('data-page-id');
-    const apiKey = el.getAttribute('data-api-key');
-    window.Version = new Version({
-      page,
-      apiKey
-    });
-    return window.Version.load();
+    version.load();
   });
 }

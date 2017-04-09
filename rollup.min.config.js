@@ -4,9 +4,6 @@ import config from './rollup.config';
 const pkg = require('./package.json');
 
 config.plugins.push(uglify());
-config.targets = [{
-  dest: pkg.browser,
-  format: 'iife'
-}];
+config.dest = pkg.browser;
 
 export default config;
