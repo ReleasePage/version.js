@@ -1,5 +1,5 @@
 {
-  "name": "release-version",
+  "name": "release-page-version",
   "version": "1.0.0",
   "description": "",
   "main": "./build/version.js",
