@@ -14,10 +14,10 @@ __Version.prototype = {
   },
 
   load() {
-    if (this.opts.apiKey) {
+    if (!this.opts.apiKey) {
       console.error('version.js: no key provided');
     }
-    if (this.opts.pageId) {
+    if (!this.opts.pageId) {
       console.error('version.js: no pageId provided');
     }
     const onLoad = this.onLoad.bind(this);
@@ -25,7 +25,7 @@ __Version.prototype = {
     xhr.addEventListener('load', function () {
       onLoad({ status: this.status, response: this.response });
     });
-    const url = `${BASE_URL}/v1/pages/${this.opts.page}/version?apiKey=${this.opts.apiKey}`;
+    const url = `${BASE_URL}/v1/pages/${this.opts.pageId}/version?apiKey=${this.opts.apiKey}`;
     xhr.open('GET', url);
     xhr.send();
   },
@@ -207,11 +207,11 @@ function formatArray(arr) {
 let version;
 const el = document.querySelector('script[data-page-id]');
 if (el) {
-  const page = el.getAttribute('data-page-id');
+  const pageId = el.getAttribute('data-page-id');
   const apiKey = el.getAttribute('data-api-key');
 
   version = new __Version({
-    page,
+    pageId,
     apiKey
   });
 } else {
