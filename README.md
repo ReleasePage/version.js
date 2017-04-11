@@ -1,5 +1,7 @@
 # version.js
 
+<img src="https://circleci.com/gh/releasepage/version.js.svg?style=shield&circle-token=:circle-token" />
+
 `version.js` allows you to display the latest version number of your webapp, shiny! ✨
 
 <img width="950" alt="screen shot 2017-04-02 at 12 29 30" src="https://cloud.githubusercontent.com/assets/1462828/24584703/2b045044-17a0-11e7-9a27-87effaf65a29.png">
