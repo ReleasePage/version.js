@@ -220,7 +220,8 @@ if (el) {
 
 if (module) {
   module.exports = version;
-} else if (typeof window !== 'undefined') {
+}
+if (typeof window !== 'undefined') {
   window.version = version;
   // set up automatically
   document.addEventListener('DOMContentLoaded', () => {

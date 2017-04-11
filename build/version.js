@@ -87,10 +87,10 @@ var version_1 = createCommonjsModule(function (module) {
       return this;
     },
     load: function load() {
-      if (this.opts.apiKey) {
+      if (!this.opts.apiKey) {
         console.error('version.js: no key provided');
       }
-      if (this.opts.pageId) {
+      if (!this.opts.pageId) {
         console.error('version.js: no pageId provided');
       }
       var onLoad = this.onLoad.bind(this);
@@ -98,7 +98,7 @@ var version_1 = createCommonjsModule(function (module) {
       xhr.addEventListener('load', function () {
         onLoad({ status: this.status, response: this.response });
       });
-      var url = BASE_URL + '/v1/pages/' + this.opts.page + '/version?apiKey=' + this.opts.apiKey;
+      var url = BASE_URL + '/v1/pages/' + this.opts.pageId + '/version?apiKey=' + this.opts.apiKey;
       xhr.open('GET', url);
       xhr.send();
     },
@@ -311,11 +311,11 @@ var version_1 = createCommonjsModule(function (module) {
   var version = void 0;
   var el = document.querySelector('script[data-page-id]');
   if (el) {
-    var page = el.getAttribute('data-page-id');
+    var pageId = el.getAttribute('data-page-id');
     var apiKey = el.getAttribute('data-api-key');
 
     version = new __Version({
-      page: page,
+      pageId: pageId,
       apiKey: apiKey
     });
   } else {
@@ -324,7 +324,8 @@ var version_1 = createCommonjsModule(function (module) {
 
   if (module) {
     module.exports = version;
-  } else if (typeof window !== 'undefined') {
+  }
+  if (typeof window !== 'undefined') {
     window.version = version;
     // set up automatically
     document.addEventListener('DOMContentLoaded', function () {
