@@ -26,8 +26,9 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^1.0.1",
-    "rollup-watch": "^3.2.2",
-    "release-notes-assets": "ssh://github.com/squarecat/release-notes-assets.git#v1.4.4"
+    "rollup-watch": "^3.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "release-notes-assets": "ssh://github.com/squarecat/release-notes-assets.git#v1.4.4"
+  }
 }
