@@ -16,7 +16,6 @@ dependencies:
 deployment:
   production:
     branch: master
-    owner: squarecat
     commands:
       # compile the build and deploy it
       - NODE_ENV=production npm run build
@@ -26,7 +25,6 @@ deployment:
       - bash ./node_modules/release-notes-assets/scripts/deploy_static.sh
   staging:
     branch: develop
-    owner: squarecat
     commands:
       # compile the build and deploy it
       - NODE_ENV=production npm run build
