@@ -1,6 +1,21 @@
 # version.js
 
-<img src="https://circleci.com/gh/releasepage/version.js.svg?style=shield&circle-token=:circle-token" />
+<div>
+  <a href="https://www.bithound.io/github/ReleasePage/version.js">
+    <img src="https://www.bithound.io/github/ReleasePage/version.js/badges/score.svg" alt="bitHound Overall Score">
+  </a>
+
+  <a href="https://circleci.com/gh/ReleasePage/version.js">
+    <img src="https://circleci.com/gh/ReleasePage/version.js.svg?style=shield&circle-token=68961a2719cf620799c76b1ed2ceffac78cc07ca" alt="Build Status"/>
+  </a>
+
+  <a href="http://versionjs.releasepage.co">
+    <img src="http://api.releasepage.co/v1/pages/82d9ad09-1fde-45c8-aa16-549353d443eb/badge.svg?apiKey=live.x7izhEzWeaeKRepW" alt="Latest Release">
+  </a>
+
+  <br/>
+  <br/>
+</div>
 
 `version.js` allows you to display the latest version number of your webapp, shiny! ✨
 
@@ -109,8 +124,6 @@ If there is more than one repo in your ReleasePage, then the above functions wil
 Version.tag({ repo: 'releasepage/version.js' })
 // v1.0.2
 ```
-
-## AMD
 
 ## AMD
 
