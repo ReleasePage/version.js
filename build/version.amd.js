@@ -68,7 +68,7 @@ var toConsumableArray = function (arr) {
 };
 
 var version_1 = createCommonjsModule(function (module) {
-  var BASE_URL = window && window.__version_base_url || 'http://api.releasepage.co';
+  var BASE_URL = window && window.__version_base_url || 'https://api.releasepage.co';
   var HELP_URL = window && window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
 
   var __Version = function __Version(opts) {
