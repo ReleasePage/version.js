@@ -110,6 +110,28 @@ Version.tag({ repo: 'releasepage/version.js' })
 // v1.0.2
 ```
 
+## AMD
+
+## AMD
+
+We also provide an AMD moduile for use with npm and webpack et al.
+
+```npm install release-page-version --save-dev```
+
+```js
+const version = require('release-page-version');
+
+// set up `version.js`
+version.options({
+  pageId: RP_PAGE_ID,
+  apiKey: RP_API_KEY
+});
+
+version.on('load', () => {
+  console.log(`New version: ${version.tag()}`);
+});
+```
+
 
 [1]: https://help.releasepage.co/api/getting-started
 [2]: https://help.releasepage.co/faq/release-pages/how-do-i-group-multiple-repositories-into-one-release-page
