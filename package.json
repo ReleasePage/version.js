@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "./build/version.js",
-  "browser": "./build/version.min.js",
-  "module": "./version.js",
+  "browser": "./build/version.amd.js",
+  "module": "./build/version.amd.js",
   "scripts": {
     "test": "eslint ./version.js",
-    "build": "rollup -c && rollup -c ./rollup.min.config.js",
-    "watch": "rollup -w -c && rollup -w -c ./rollup.min.config.js"
+    "build": "rollup -c && rollup -c ./rollup.min.config.js && rollup -c ./rollup.amd.config.js",
+    "watch": "rollup -w -c && rollup -w -c ./rollup.min.config.js && rollup -w -c ./rollup.amd.config.js"
   },
   "author": "James Ivings <james@releasepage.co>",
   "license": "MIT",
