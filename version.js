@@ -1,5 +1,5 @@
 const EventEmitter = require('microevent');
-const BASE_URL = (window && window.__version_base_url) || 'http://api.releasepage.co';
+const BASE_URL = (window && window.__version_base_url) || 'https://api.releasepage.co';
 const HELP_URL = (window && window.__help_base_url) || 'https://help.releasepage.co/api/getting-started';
 
 const __Version = function (opts) {
