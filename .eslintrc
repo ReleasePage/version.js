@@ -9,6 +9,7 @@
     "Version": true
   },
   "rules": {
+    "import/extensions": ['off', 'never'],
     "comma-dangle": [2, "never"],
     "no-console": 0,
     "func-names": 0,
