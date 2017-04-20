@@ -62,8 +62,7 @@ Version.prototype = {
         return console.error('version.js: GitHub repository has moved permanently');
       case 302:
       case 307:
-        // todo
-        break;
+        return console.error('version.js: GitHub repository has moved');
       case 200: {
         const data = JSON.parse(response);
         this.latest = [{
