@@ -22,7 +22,7 @@ deployment:
       # prune modules that are not needed in production
       - yarn install --production --ignore-scripts --prefer-offline
       # deploy
-      - bash ./node_modules/release-notes-assets/scripts/deploy_static.sh
+      - bash "$DEPLOY_MASTER_SCRIPT"
   staging:
     branch: develop
     commands:
@@ -31,4 +31,4 @@ deployment:
       # prune modules that are not needed in production
       - yarn install --production --ignore-scripts --prefer-offline
       # deploy
-      - bash ./node_modules/release-notes-assets/scripts/deploy_static_staging.sh
+      - bash "$DEPLOY_STAGING_SCRIPT"
