@@ -1,15 +1,16 @@
 const EventEmitter = require('microevent');
-const BASE_URL = (window && window.__version_base_url) || 'https://api.releasepage.co';
-const HELP_URL = (window && window.__help_base_url) || 'https://help.releasepage.co/api/getting-started';
+
+const BASE_URL = (window && window.version_base_url) || 'https://api.releasepage.co';
+const HELP_URL = (window && window.help_base_url) || 'https://help.releasepage.co/api/getting-started';
 
 const GITHUB_BASE_URL = 'https://api.github.com/repos/:owner/:repo/releases/latest';
 
-const __Version = function (opts = {}) {
+const Version = function (opts = {}) {
   this.opts = opts;
   this.bind('load', () => this.render());
 };
 
-__Version.prototype = {
+Version.prototype = {
   options(opts) {
     this.opts = opts;
     return this;
@@ -17,7 +18,7 @@ __Version.prototype = {
 
   load() {
     if (this.opts.github) {
-      this._useGitHub = true;
+      this.useGitHub = true;
     } else {
       if (!this.opts.apiKey) {
         console.error('version.js: no key provided');
@@ -38,7 +39,7 @@ __Version.prototype = {
   },
 
   getUrl() {
-    if (this._useGitHub) {
+    if (this.useGitHub) {
       const { repo } = this.opts.github;
       return GITHUB_BASE_URL.replace(':owner/:repo', repo);
     }
@@ -46,7 +47,7 @@ __Version.prototype = {
   },
 
   onLoad(resp) {
-    return this._useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
+    return this.useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
   },
 
   parseGitHubResponse({ status, response }) {
@@ -62,6 +63,7 @@ __Version.prototype = {
       case 302:
       case 307:
         // todo
+        break;
       case 200: {
         const data = JSON.parse(response);
         this.latest = [{
@@ -216,8 +218,8 @@ __Version.prototype = {
   },
 
   tag({ repo } = {}) {
-    if (window && window.__debug_version) {
-      return window.__debug_version;
+    if (localStorage && localStorage.getItem('versionjs.debug_version')) {
+      return localStorage.getItem('versionjs.debug_version');
     }
     if (this.isGrouped()) {
       return this.latestGrouped.version;
@@ -234,7 +236,7 @@ __Version.prototype = {
   }
 };
 
-EventEmitter.mixin(__Version);
+EventEmitter.mixin(Version);
 
 function formatArray(arr) {
   let outStr = '';
@@ -258,20 +260,20 @@ if (el) {
   const pageId = el.getAttribute('data-page-id');
   const apiKey = el.getAttribute('data-api-key');
   if (pageId) {
-    version = new __Version({
+    version = new Version({
       pageId,
       apiKey
     });
   } else {
     const repo = el.getAttribute('data-repo');
-    version = new __Version({
+    version = new Version({
       github: {
         repo
       }
     });
   }
 } else {
-  version = new __Version();
+  version = new Version();
 }
 
 if (module) {

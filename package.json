@@ -13,21 +13,23 @@
   "author": "James Ivings <james@releasepage.co>",
   "license": "MIT",
   "devDependencies": {
-    "babel-eslint": "6.1.2",
+    "babel-eslint": "^7.2.2",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "6.6.5",
-    "babel-preset-es2015": "6.18.0",
-    "eslint": "2.4.0",
-    "eslint-config-airbnb": "6.0.2",
-    "eslint-plugin-prefer-object-spread": "1.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-prefer-object-spread": "^1.2.1",
     "microevent": "^1.0.0",
     "node-sass": "^4.5.2",
-    "rollup": "0.41.4",
+    "rollup": "^0.41.6",
     "rollup-plugin-babel": "2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^1.0.1",
     "rollup-watch": "^3.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "eslint-plugin-import": "^2.2.0"
+  }
 }
