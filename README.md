@@ -28,7 +28,7 @@
 - [Installation](#installation)
 - [Badges](#badges)
   - [Version](#version)
-  - [Name](#name)
+  - [Name](#repo-name)
   - [More](#etcetera)
 - [ReleasePage Integration](#releasepage-integration)
   - [Grouped versions](#grouped-versions)
@@ -55,7 +55,7 @@ Any elements with the attribute `data-version-badge` will be populated with the 
 
 <img width="296" alt="screen shot 2017-04-01 at 18 44 41" src="https://cloud.githubusercontent.com/assets/1462828/24578484/6909bb62-170b-11e7-98a9-c8015e2bb21b.png">
 
-### Name
+### Repo Name
 Any elements with the attribute `data-repo-name` will display the friendly name of the repository.
 
 ```html
@@ -133,9 +133,9 @@ Specify the repo name to include that repo individually.
 
 Note; if you don't provide a `data-version-for` container, badges will always display the grouped version if it's available.
 
-## Other version stuff 🚀
+## Other version stuff
 
-Badges are awesome, but you can actually do a lot more with the version information we send you. `version.js` will expose a `Version` object on the `window` for you to play havoc with the version info.
+Badges are awesome, but you can actually do a lot more with the version information we send you. `version.js` will expose a `Version` object on the `window` for you to play havoc with the version info 🤘
 
 ```node
 // the tag number of the release
