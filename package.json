@@ -19,7 +19,10 @@
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
+    "eslint-plugin-react": "^6.10.3",
     "microevent": "^1.0.0",
     "node-sass": "^4.5.2",
     "rollup": "^0.41.6",
@@ -27,8 +30,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^1.0.1",
-    "rollup-watch": "^3.2.2",
-    "eslint-plugin-import": "^2.2.0"
+    "rollup-watch": "^3.2.2"
   },
   "dependencies": {}
 }
