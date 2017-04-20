@@ -362,6 +362,7 @@ var version_1 = createCommonjsModule(function (module) {
 
   var version = void 0;
   var el = document.querySelector('script[data-page-id]');
+  var githubEl = document.querySelector('script[data-repo]');
   if (el) {
     var pageId = el.getAttribute('data-page-id');
     var apiKey = el.getAttribute('data-api-key');
@@ -370,14 +371,14 @@ var version_1 = createCommonjsModule(function (module) {
         pageId: pageId,
         apiKey: apiKey
       });
-    } else {
-      var repo = el.getAttribute('data-repo');
-      version = new Version({
-        github: {
-          repo: repo
-        }
-      });
     }
+  } else if (githubEl) {
+    var repo = githubEl.getAttribute('data-repo');
+    version = new Version({
+      github: {
+        repo: repo
+      }
+    });
   } else {
     version = new Version();
   }
