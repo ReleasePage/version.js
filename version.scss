@@ -1,0 +1,35 @@
+[data-version-badge], [data-version-author], [data-repo-name], [data-version-published] {
+  padding: 4px 6px;
+  border-radius: 4px;
+  &:hover {
+    cursor: default;
+  }
+}
+
+[data-version-badge] {
+  background: rgba(#247BA0, 0.4);
+  &:hover {
+    background: rgba(#247BA0, 0.65);
+  }
+}
+
+[data-version-author] {
+  background: rgba(#F25F5C, 0.4);
+  &:hover {
+    background: rgba(#F25F5C, 0.65);
+  }
+}
+
+[data-repo-name] {
+  background: rgba(#70C1B3, 0.4);
+  &:hover {
+    background: rgba(#70C1B3, 0.65);
+  }
+}
+
+[data-version-published] {
+  background: rgba(#FFE066, 0.4);
+  &:hover {
+    background: rgba(#FFE066, 0.65);
+  }
+}

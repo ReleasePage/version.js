@@ -2,7 +2,9 @@ const EventEmitter = require('microevent');
 const BASE_URL = (window && window.__version_base_url) || 'https://api.releasepage.co';
 const HELP_URL = (window && window.__help_base_url) || 'https://help.releasepage.co/api/getting-started';
 
-const __Version = function (opts) {
+const GITHUB_BASE_URL = 'https://api.github.com/repos/:owner/:repo/releases/latest';
+
+const __Version = function (opts = {}) {
   this.opts = opts;
   this.bind('load', () => this.render());
 };
@@ -14,23 +16,69 @@ __Version.prototype = {
   },
 
   load() {
-    if (!this.opts.apiKey) {
-      console.error('version.js: no key provided');
+    if (this.opts.github) {
+      this._useGitHub = true;
+    } else {
+      if (!this.opts.apiKey) {
+        console.error('version.js: no key provided');
+      }
+      if (!this.opts.pageId) {
+        console.error('version.js: no pageId provided');
+      }
     }
-    if (!this.opts.pageId) {
-      console.error('version.js: no pageId provided');
-    }
+
     const onLoad = this.onLoad.bind(this);
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function () {
       onLoad({ status: this.status, response: this.response });
     });
-    const url = `${BASE_URL}/v1/pages/${this.opts.pageId}/version?apiKey=${this.opts.apiKey}`;
+    const url = this.getUrl();
     xhr.open('GET', url);
     xhr.send();
   },
 
-  onLoad({ status, response }) {
+  getUrl() {
+    if (this._useGitHub) {
+      const { repo } = this.opts.github;
+      return GITHUB_BASE_URL.replace(':owner/:repo', repo);
+    }
+    return `${BASE_URL}/v1/pages/${this.opts.pageId}/version?apiKey=${this.opts.apiKey}`;
+  },
+
+  onLoad(resp) {
+    return this._useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
+  },
+
+  parseGitHubResponse({ status, response }) {
+    switch (status) {
+      case 401:
+        return console.error('version.js: Bad GitHub credentials');
+      case 403:
+        return console.error('version.js: Access is denied to that GitHub repository');
+      case 404:
+        return console.error('version.js: GitHub repository not found');
+      case 301:
+        return console.error('version.js: GitHub repository has moved permanently');
+      case 302:
+      case 307:
+        // todo
+      case 200: {
+        const data = JSON.parse(response);
+        this.latest = [{
+          repo: this.opts.github.repo,
+          version: data.tag_name,
+          author: data.author.login,
+          published_at: data.published_at
+        }];
+        break;
+      }
+      default:
+        return console.error('version.js: GitHub API error', status, response);
+    }
+    return this.trigger('load');
+  },
+
+  parseReleasePageResponse({ status, response }) {
     switch (status) {
       case 404:
         return console.error(
@@ -49,7 +97,7 @@ __Version.prototype = {
         break;
       }
       default:
-        return console.error('version.js: ReleasePage API error', status);
+        return console.error('version.js: ReleasePage API error', status, response);
     }
     return this.trigger('load');
   },
@@ -209,11 +257,19 @@ const el = document.querySelector('script[data-page-id]');
 if (el) {
   const pageId = el.getAttribute('data-page-id');
   const apiKey = el.getAttribute('data-api-key');
-
-  version = new __Version({
-    pageId,
-    apiKey
-  });
+  if (pageId) {
+    version = new __Version({
+      pageId,
+      apiKey
+    });
+  } else {
+    const repo = el.getAttribute('data-repo');
+    version = new __Version({
+      github: {
+        repo
+      }
+    });
+  }
 } else {
   version = new __Version();
 }

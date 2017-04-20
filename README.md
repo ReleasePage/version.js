@@ -17,23 +17,30 @@
   <br/>
 </div>
 
-`version.js` allows you to display the latest version number of your webapp, shiny! ✨
+`version.js` allows you to display the latest version number of your GitHub repo, shiny! ✨
+
+---
+
+[Demo][5]
 
 <img width="950" alt="screen shot 2017-04-02 at 12 29 30" src="https://cloud.githubusercontent.com/assets/1462828/24584703/2b045044-17a0-11e7-9a27-87effaf65a29.png">
 
-- [Basic Demo][3]
-- [Grouped Release Demo][4]
-
-## Enable API access
-
-First you need to grab your ReleasePage API key. Learn more about the ReleasePage API [here][1].
+- [Installation](#installation)
+- [Badges](#badges)
+  - [Version](#version)
+  - [Name](#name)
+  - [More](#etcetera)
+- [ReleasePage Integration](#releasepage-integration)
+  - [Grouped versions](#grouped-versions)
+- [Other version stuff](#other-version-stuff)
+- [AMD](#amd)
 
 ## Installation
 
-Include the library from our CDN, providing your API key and the ReleasePage ID.
+Include the library from our CDN, providing the GitHub repository that you want to use.
 
 ```html
-<script src="//cdn.releasepage.co/js/version.js" data-api-key="<API_KEY>" data-page-id="<PAGE_ID>" ></script>
+<script src="//cdn.releasepage.co/js/version.js" data-repo="releasepage/version.js"></script>
 ```
 
 ## Badges
@@ -57,9 +64,52 @@ Any elements with the attribute `data-repo-name` will display the friendly name 
 
 <img width="540" alt="screen shot 2017-04-02 at 12 32 13" src="https://cloud.githubusercontent.com/assets/1462828/24584717/7100c730-17a0-11e7-923e-862a4fdecc66.png">
 
-## Grouped versions
+### Etcetera
 
-If your ReleasePage is cool enough to use [grouped versions][2] then you can display the repo versions individually, or grouped.
+```html
+<p>
+  The latest version of <span data-repo-name></span> is <span data-version-badge></span>, authored by <span data-version-author></span> on <span data-version-published></span>
+</p>
+```
+
+<img width="960" alt="screen shot 2017-04-02 at 12 45 17" src="https://cloud.githubusercontent.com/assets/1462828/24584756/46739e14-17a2-11e7-8b39-5728febdea01.png">
+
+## ReleasePage Integration
+
+`version.js` can also be used as a [ReleasePage][6] integration allowing you to take advantage of extra cool features:
+
+- Private repos
+- Group releases from different repos into one combined version
+- A more generous rate limit
+
+---
+
+- [Basic Demo][3]
+- [Grouped Demo][4]
+
+
+### Installation
+
+
+Include the library from our CDN, providing your API key and the ReleasePage ID.
+
+```html
+<script src="//cdn.releasepage.co/js/version.js" data-api-key="<API_KEY>" data-page-id="<PAGE_ID>" ></script>
+```
+
+### Enable API access
+
+If you don't have an account yet, you can create one [on our homepage][6]. After creating your first beautiful Release Page, you need to grab your API key.
+
+Learn more about ReleasePage API keys [here][1].
+
+### ReleasePage Badges
+
+All of the [above badges](#badges) are also available using the ReleasePage API. However, with grouped releases some of them will behave slightly differently.
+
+### Grouped versions
+
+If your ReleasePage is cool enough to use [grouped releases][2] then you can display the repo versions individually, or grouped.
 
 ```html
 <p>
@@ -101,7 +151,7 @@ Version.publishedAt()
 // "2017-03-26T15:28:42Z"
 ```
 
-With grouped versions this information will be a little more interesting.
+With grouped versions from the ReleasePage API this information will be a little more interesting.
 
 ```node
 // the latest grouped version
@@ -134,15 +184,29 @@ We also provide an AMD moduile for use with npm and webpack et al.
 ```js
 const version = require('release-page-version');
 
-// set up `version.js`
+// set up `version.js` using the GitHub API
+version.options({
+  github: {
+    repo: REPO_NAME
+  }
+});
+
+// ...or set up `version.js` using the ReleasePage API
 version.options({
   pageId: RP_PAGE_ID,
   apiKey: RP_API_KEY
 });
 
+// when first set up `version.js` will automatically request
+// the version information. The `load` event will be fired
+// when it is returned
 version.on('load', () => {
   console.log(`New version: ${version.tag()}`);
 });
+
+// ...subsequently you can call `load` manually
+// to retrieve the latest information
+version.load();
 ```
 
 
@@ -150,3 +214,5 @@ version.on('load', () => {
 [2]: https://help.releasepage.co/faq/release-pages/how-do-i-group-multiple-repositories-into-one-release-page
 [3]: http://codepen.io/Jivings/pen/KWJwxY
 [4]: http://codepen.io/Jivings/pen/zZezNa
+[5]: https://codepen.io/Jivings/pen/ybOyRE
+[6]: https://releasepage.co
