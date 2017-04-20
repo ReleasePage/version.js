@@ -69,12 +69,12 @@ var toConsumableArray = function (arr) {
 };
 
 var version_1 = createCommonjsModule(function (module) {
-  var BASE_URL = window && window.__version_base_url || 'https://api.releasepage.co';
-  var HELP_URL = window && window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
+  var BASE_URL = window && window.version_base_url || 'https://api.releasepage.co';
+  var HELP_URL = window && window.help_base_url || 'https://help.releasepage.co/api/getting-started';
 
   var GITHUB_BASE_URL = 'https://api.github.com/repos/:owner/:repo/releases/latest';
 
-  var __Version = function __Version() {
+  var Version = function Version() {
     var _this = this;
 
     var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -85,14 +85,14 @@ var version_1 = createCommonjsModule(function (module) {
     });
   };
 
-  __Version.prototype = {
+  Version.prototype = {
     options: function options(opts) {
       this.opts = opts;
       return this;
     },
     load: function load() {
       if (this.opts.github) {
-        this._useGitHub = true;
+        this.useGitHub = true;
       } else {
         if (!this.opts.apiKey) {
           console.error('version.js: no key provided');
@@ -112,7 +112,7 @@ var version_1 = createCommonjsModule(function (module) {
       xhr.send();
     },
     getUrl: function getUrl() {
-      if (this._useGitHub) {
+      if (this.useGitHub) {
         var repo = this.opts.github.repo;
 
         return GITHUB_BASE_URL.replace(':owner/:repo', repo);
@@ -120,7 +120,7 @@ var version_1 = createCommonjsModule(function (module) {
       return BASE_URL + '/v1/pages/' + this.opts.pageId + '/version?apiKey=' + this.opts.apiKey;
     },
     onLoad: function onLoad(resp) {
-      return this._useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
+      return this.useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
     },
     parseGitHubResponse: function parseGitHubResponse(_ref) {
       var status = _ref.status,
@@ -137,7 +137,7 @@ var version_1 = createCommonjsModule(function (module) {
           return console.error('version.js: GitHub repository has moved permanently');
         case 302:
         case 307:
-        // todo
+          return console.error('version.js: GitHub repository has moved');
         case 200:
           {
             var data = JSON.parse(response);
@@ -323,8 +323,8 @@ var version_1 = createCommonjsModule(function (module) {
       var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           repo = _ref9.repo;
 
-      if (window && window.__debug_version) {
-        return window.__debug_version;
+      if (localStorage && localStorage.getItem('versionjs.debug_version')) {
+        return localStorage.getItem('versionjs.debug_version');
       }
       if (this.isGrouped()) {
         return this.latestGrouped.version;
@@ -342,7 +342,7 @@ var version_1 = createCommonjsModule(function (module) {
     }
   };
 
-  microevent.mixin(__Version);
+  microevent.mixin(Version);
 
   function formatArray(arr) {
     var outStr = '';
@@ -366,20 +366,20 @@ var version_1 = createCommonjsModule(function (module) {
     var pageId = el.getAttribute('data-page-id');
     var apiKey = el.getAttribute('data-api-key');
     if (pageId) {
-      version = new __Version({
+      version = new Version({
         pageId: pageId,
         apiKey: apiKey
       });
     } else {
       var repo = el.getAttribute('data-repo');
-      version = new __Version({
+      version = new Version({
         github: {
           repo: repo
         }
       });
     }
   } else {
-    version = new __Version();
+    version = new Version();
   }
 
   if (module) {
