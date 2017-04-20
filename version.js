@@ -255,6 +255,7 @@ function formatArray(arr) {
 
 let version;
 const el = document.querySelector('script[data-page-id]');
+const githubEl = document.querySelector('script[data-repo]');
 if (el) {
   const pageId = el.getAttribute('data-page-id');
   const apiKey = el.getAttribute('data-api-key');
@@ -263,14 +264,14 @@ if (el) {
       pageId,
       apiKey
     });
-  } else {
-    const repo = el.getAttribute('data-repo');
-    version = new Version({
-      github: {
-        repo
-      }
-    });
   }
+} else if (githubEl) {
+  const repo = githubEl.getAttribute('data-repo');
+  version = new Version({
+    github: {
+      repo
+    }
+  });
 } else {
   version = new Version();
 }
