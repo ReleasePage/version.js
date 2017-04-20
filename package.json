@@ -1,34 +1,36 @@
 {
   "name": "release-page-version",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "",
   "main": "./build/version.js",
   "browser": "./build/version.amd.js",
   "module": "./build/version.amd.js",
   "scripts": {
     "test": "eslint ./version.js",
-    "build": "rollup -c && rollup -c ./rollup.min.config.js && rollup -c ./rollup.amd.config.js",
+    "build": "rollup -c && rollup -c ./rollup.min.config.js && rollup -c ./rollup.amd.config.js && node-sass --output-style compressed ./version.scss ./build/version.css",
     "watch": "rollup -w -c && rollup -w -c ./rollup.min.config.js && rollup -w -c ./rollup.amd.config.js"
   },
   "author": "James Ivings <james@releasepage.co>",
   "license": "MIT",
   "devDependencies": {
-    "babel-eslint": "6.1.2",
+    "babel-eslint": "^7.2.2",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "6.6.5",
-    "babel-preset-es2015": "6.18.0",
-    "eslint": "2.4.0",
-    "eslint-config-airbnb": "6.0.2",
-    "eslint-plugin-prefer-object-spread": "1.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-prefer-object-spread": "^1.2.1",
+    "eslint-plugin-react": "^6.10.3",
     "microevent": "^1.0.0",
-    "rollup": "0.41.4",
+    "node-sass": "^4.5.2",
+    "rollup": "^0.41.6",
     "rollup-plugin-babel": "2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^1.0.1",
     "rollup-watch": "^3.2.2"
   },
-  "dependencies": {
-    "release-notes-assets": "ssh://github.com/squarecat/release-notes-assets.git#v1.4.4"
-  }
+  "dependencies": {}
 }

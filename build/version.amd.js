@@ -68,11 +68,15 @@ var toConsumableArray = function (arr) {
 };
 
 var version_1 = createCommonjsModule(function (module) {
-  var BASE_URL = window && window.__version_base_url || 'https://api.releasepage.co';
-  var HELP_URL = window && window.__help_base_url || 'https://help.releasepage.co/api/getting-started';
+  var BASE_URL = window && window.version_base_url || 'https://api.releasepage.co';
+  var HELP_URL = window && window.help_base_url || 'https://help.releasepage.co/api/getting-started';
 
-  var __Version = function __Version(opts) {
+  var GITHUB_BASE_URL = 'https://api.github.com/repos/:owner/:repo/releases/latest';
+
+  var Version = function Version() {
     var _this = this;
+
+    var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     this.opts = opts;
     this.bind('load', function () {
@@ -80,30 +84,78 @@ var version_1 = createCommonjsModule(function (module) {
     });
   };
 
-  __Version.prototype = {
+  Version.prototype = {
     options: function options(opts) {
       this.opts = opts;
       return this;
     },
     load: function load() {
-      if (!this.opts.apiKey) {
-        console.error('version.js: no key provided');
+      if (this.opts.github) {
+        this.useGitHub = true;
+      } else {
+        if (!this.opts.apiKey) {
+          console.error('version.js: no key provided');
+        }
+        if (!this.opts.pageId) {
+          console.error('version.js: no pageId provided');
+        }
       }
-      if (!this.opts.pageId) {
-        console.error('version.js: no pageId provided');
-      }
+
       var onLoad = this.onLoad.bind(this);
       var xhr = new XMLHttpRequest();
       xhr.addEventListener('load', function () {
         onLoad({ status: this.status, response: this.response });
       });
-      var url = BASE_URL + '/v1/pages/' + this.opts.pageId + '/version?apiKey=' + this.opts.apiKey;
+      var url = this.getUrl();
       xhr.open('GET', url);
       xhr.send();
     },
-    onLoad: function onLoad(_ref) {
+    getUrl: function getUrl() {
+      if (this.useGitHub) {
+        var repo = this.opts.github.repo;
+
+        return GITHUB_BASE_URL.replace(':owner/:repo', repo);
+      }
+      return BASE_URL + '/v1/pages/' + this.opts.pageId + '/version?apiKey=' + this.opts.apiKey;
+    },
+    onLoad: function onLoad(resp) {
+      return this.useGitHub ? this.parseGitHubResponse(resp) : this.parseReleasePageResponse(resp);
+    },
+    parseGitHubResponse: function parseGitHubResponse(_ref) {
       var status = _ref.status,
           response = _ref.response;
+
+      switch (status) {
+        case 401:
+          return console.error('version.js: Bad GitHub credentials');
+        case 403:
+          return console.error('version.js: Access is denied to that GitHub repository');
+        case 404:
+          return console.error('version.js: GitHub repository not found');
+        case 301:
+          return console.error('version.js: GitHub repository has moved permanently');
+        case 302:
+        case 307:
+          return console.error('version.js: GitHub repository has moved');
+        case 200:
+          {
+            var data = JSON.parse(response);
+            this.latest = [{
+              repo: this.opts.github.repo,
+              version: data.tag_name,
+              author: data.author.login,
+              published_at: data.published_at
+            }];
+            break;
+          }
+        default:
+          return console.error('version.js: GitHub API error', status, response);
+      }
+      return this.trigger('load');
+    },
+    parseReleasePageResponse: function parseReleasePageResponse(_ref2) {
+      var status = _ref2.status,
+          response = _ref2.response;
 
       switch (status) {
         case 404:
@@ -120,7 +172,7 @@ var version_1 = createCommonjsModule(function (module) {
             break;
           }
         default:
-          return console.error('version.js: ReleasePage API error', status);
+          return console.error('version.js: ReleasePage API error', status, response);
       }
       return this.trigger('load');
     },
@@ -143,10 +195,10 @@ var version_1 = createCommonjsModule(function (module) {
       }
       return this;
     },
-    renderAuthors: function renderAuthors(_ref2) {
+    renderAuthors: function renderAuthors(_ref3) {
       var _this2 = this;
 
-      var elements = _ref2.elements;
+      var elements = _ref3.elements;
 
       return elements.forEach(function (el) {
         var repo = el.parentElement.getAttribute('data-version-for');
@@ -167,10 +219,10 @@ var version_1 = createCommonjsModule(function (module) {
         el.textContent = formatArray(authors);
       });
     },
-    renderPublishedAt: function renderPublishedAt(_ref3) {
+    renderPublishedAt: function renderPublishedAt(_ref4) {
       var _this3 = this;
 
-      var elements = _ref3.elements;
+      var elements = _ref4.elements;
 
       return elements.forEach(function (el) {
         var repo = el.parentElement.getAttribute('data-version-for');
@@ -188,10 +240,10 @@ var version_1 = createCommonjsModule(function (module) {
         el.textContent = new Date(publishedAt).toDateString();
       });
     },
-    renderRepoNames: function renderRepoNames(_ref4) {
+    renderRepoNames: function renderRepoNames(_ref5) {
       var _this4 = this;
 
-      var elements = _ref4.elements;
+      var elements = _ref5.elements;
 
       return elements.forEach(function (el) {
         var repo = el.parentElement.getAttribute('data-version-for');
@@ -212,10 +264,10 @@ var version_1 = createCommonjsModule(function (module) {
         el.textContent = formatArray(names);
       });
     },
-    renderBadges: function renderBadges(_ref5) {
+    renderBadges: function renderBadges(_ref6) {
       var _this5 = this;
 
-      var elements = _ref5.elements;
+      var elements = _ref6.elements;
 
       elements.forEach(function (el) {
         var repo = el.parentElement.getAttribute('data-version-for');
@@ -237,8 +289,8 @@ var version_1 = createCommonjsModule(function (module) {
       });
     },
     publishedAt: function publishedAt() {
-      var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          repo = _ref6.repo;
+      var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          repo = _ref7.repo;
 
       if (this.isGrouped()) {
         return this.latestGrouped.published_at;
@@ -252,8 +304,8 @@ var version_1 = createCommonjsModule(function (module) {
       return this.latest[0].published_at;
     },
     author: function author() {
-      var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          repo = _ref7.repo;
+      var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          repo = _ref8.repo;
 
       if (this.isGrouped()) {
         return this.latestGrouped.authors;
@@ -267,11 +319,11 @@ var version_1 = createCommonjsModule(function (module) {
       return this.latest[0].author;
     },
     tag: function tag() {
-      var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          repo = _ref8.repo;
+      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          repo = _ref9.repo;
 
-      if (window && window.__debug_version) {
-        return window.__debug_version;
+      if (localStorage && localStorage.getItem('versionjs.debug_version')) {
+        return localStorage.getItem('versionjs.debug_version');
       }
       if (this.isGrouped()) {
         return this.latestGrouped.version;
@@ -289,7 +341,7 @@ var version_1 = createCommonjsModule(function (module) {
     }
   };
 
-  microevent.mixin(__Version);
+  microevent.mixin(Version);
 
   function formatArray(arr) {
     var outStr = '';
@@ -312,13 +364,21 @@ var version_1 = createCommonjsModule(function (module) {
   if (el) {
     var pageId = el.getAttribute('data-page-id');
     var apiKey = el.getAttribute('data-api-key');
-
-    version = new __Version({
-      pageId: pageId,
-      apiKey: apiKey
-    });
+    if (pageId) {
+      version = new Version({
+        pageId: pageId,
+        apiKey: apiKey
+      });
+    } else {
+      var repo = el.getAttribute('data-repo');
+      version = new Version({
+        github: {
+          repo: repo
+        }
+      });
+    }
   } else {
-    version = new __Version();
+    version = new Version();
   }
 
   if (module) {
