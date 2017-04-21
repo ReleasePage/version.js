@@ -1,14 +1,27 @@
 {
   "name": "release-page-version",
   "version": "1.1.1",
-  "description": "",
+  "description": "Display the latest version number of your GitHub repo! ✨ ",
+  "keywords": ["version", "github", "releases", "release", "github release", "repo version"],
+  "bugs": {
+    "url": "https://github.com/releasepage/version.js/issues",
+    "email": "james@releasepage.co"
+  },
+  "repository": "releasepage/version.js",
   "main": "./build/version.js",
+  "minified": "./build/version.min.js",
   "browser": "./build/version.amd.js",
   "module": "./build/version.amd.js",
   "scripts": {
+    "clean": "rm -r ./build/*",
     "test": "eslint ./version.js",
-    "build": "rollup -c && rollup -c ./rollup.min.config.js && rollup -c ./rollup.amd.config.js && node-sass --output-style compressed ./version.scss ./build/version.css",
-    "watch": "rollup -w -c && rollup -w -c ./rollup.min.config.js && rollup -w -c ./rollup.amd.config.js"
+    "build": "rollup -c && npm run build:min && npm run build:amd && npm run build:sass",
+    "watch": "rollup -c -w && npm run build:min:watch && npm run build:amd:watch",
+    "build:sass": "node-sass --output-style compressed version.scss ./build/version.css",
+    "build:min": "rollup -c ./rollup.min.config.js",
+    "build:amd": "rollup -c ./rollup.amd.config.js",
+    "build:min:watch": "rollup -w -c ./rollup.min.config.js",
+    "build:amd:watch": "rollup -w -c ./rollup.amd.config.js"
   },
   "author": "James Ivings <james@releasepage.co>",
   "license": "MIT",
