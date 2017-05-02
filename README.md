@@ -209,6 +209,11 @@ version.on('load', () => {
 version.load();
 ```
 
+# Stay in touch
+Follow us on Twitter: [@ReleasePage][7]
+
+Email us: hi@releasepage.co
+
 
 [1]: https://help.releasepage.co/api/getting-started
 [2]: https://help.releasepage.co/faq/release-pages/how-do-i-group-multiple-repositories-into-one-release-page
@@ -216,3 +221,4 @@ version.load();
 [4]: http://codepen.io/Jivings/pen/zZezNa
 [5]: https://codepen.io/Jivings/pen/ybOyRE
 [6]: https://releasepage.co
+[7]: https://twitter.com/ReleasePage
