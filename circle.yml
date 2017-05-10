@@ -17,6 +17,8 @@ deployment:
   production:
     branch: master
     commands:
+      # rebuild sass because yarn doesn't build it for the correct environment
+      - npm rebuild node-sass
       # compile the build and deploy it
       - NODE_ENV=production npm run build
       # deploy
@@ -24,6 +26,8 @@ deployment:
   staging:
     branch: develop
     commands:
+      # rebuild sass because yarn doesn't build it for the correct environment
+      - npm rebuild node-sass
       # compile the build and deploy it
       - NODE_ENV=production npm run build
       # deploy
